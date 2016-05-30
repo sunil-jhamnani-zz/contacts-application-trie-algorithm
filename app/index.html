@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="contactApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="contactApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="contactApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="contactApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <!--<base href="/add">-->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Search through Contacts</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <style>
+    .capitalize {
+      text-transform: capitalize;
+    }
+    #message {
+      transition: opacity 2s ease-in;
+      -moz-transition:opacity 2s ease-in;
+      -o-transition: opacity 2s ease-in;
+      -webkit-transition: opacity 2s ease-in;
+    }
+    .hidden {
+      opacity: 0.0;
+    }
+  </style>
+  <script>
+    String.prototype.capitalize = function() {
+      return this.charAt(0).toUpperCase() + this.slice(1);
+    }
+  </script>
+</head>
+<body ng-controller="MainController">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="#/add">Add <span class="sr-only">(current)</span></a></li>
+          <li><a href="#/search">Search</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div ng-view></div>
+
+  <script src="lib/angular.js"></script>
+  <script src="lib/angular-route.js"></script>
+  <script src="lib/angular-mocks.js"></script>
+  <script src="app.js"></script>
+  <script src="controllers/MainController.js"></script>
+  <script src="services/ContactService.js"></script>
+  <script src="controllers/AddController.js"></script>
+  <script src="controllers/SearchController.js"></script>
+  <script src="services/filters.js"></script>
+</body>
+</html>
