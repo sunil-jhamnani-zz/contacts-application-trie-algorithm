@@ -13,9 +13,9 @@ You need git to clone the contact-application-angularjs repository. You can get 
 We also use a number of node.js tools to initialize and test contact-application-angularjs. You must have node.js and
 its package manager (npm) installed.  You can get them from [http://nodejs.org/](http://nodejs.org/).
 
-### Clone angular-seed
+### Clone contact-application-angularjs
 
-Clone the angular-seed repository using [git][git]:
+Clone the contact-application-angularjs repository using [git][git]:
 
 ```
 git clone https://github.com/sunil-jhamnani/contact-application-angularjs.git
