@@ -40,9 +40,12 @@ npm install karma-cli -g
 
 ### Run the Application
 
-This is a small application and need not required any server. Simplest way to run the application is to just launch the index.html file which resides here:
-contact-application-angularjs/app/index.html
+There is right now no server side coding involved in this project. Still to start a simple HTTP server, install python from [https://www.python.org/downloads/](Python.org) and then run this simple command into the "app" folder:
 
+```
+cd contact-application-angularjs/app
+python -m SimpleHTTPServer  
+```
 ### Running Unit Tests
 
 * the configuration is found at `karma.conf.js`
