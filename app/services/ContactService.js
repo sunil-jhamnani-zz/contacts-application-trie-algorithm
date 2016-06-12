@@ -10,7 +10,7 @@
             var factory = {};
 
             factory.getContacts = function () {
-                return contactList;
+                return contactList.sort(compare);
             };
 
             var contactList = [
@@ -24,6 +24,15 @@
                 {firstname: 'Sunil', lastname: ''},
 
             ];
+
+            function compare(first,second) {
+                if (first.firstname < second. firstname)
+                    return -1;
+                else if (first.firstname > second.firstname)
+                    return 1;
+                else
+                    return 0;
+            }
 
             return factory;
         }])

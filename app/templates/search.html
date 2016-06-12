@@ -2,9 +2,9 @@
     <div class="panel panel-default">
         <div class="panel-heading">Search Contact</div>
         <div class="list-group-item">
-            <input type="text" class="form-control" placeholder="Type here to search" ng-model="searchFilter">
+            <input type="text" class="form-control" placeholder="Type here to search" ng-model="searchFilter" ng-model-options="{ debounce: 500}">
             <ul class="list-group">
-                <li class="list-group-item" ng-repeat="contact in contacts | filterContact: searchFilter | orderBy : ['firstname','lastname']">
+                <li class="list-group-item" ng-repeat="contact in contacts | filterContact: searchFilter">
                     {{contact.firstname + " " + contact.lastname}}
                 </li>
             </ul>
