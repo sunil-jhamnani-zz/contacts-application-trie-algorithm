@@ -18,6 +18,9 @@
                     $scope.contact.lastname = $scope.contact.lastname ? $scope.contact.lastname.capitalize() : '';
                     if (checkAvailability()) {
                         $rootScope.contacts.push($scope.contact);
+
+                        //Contact list is sorted after new contact is added
+                        $rootScope.contacts = $rootScope.contacts.sort(compare('firstname'));
                         $scope.message = "Contact Added Successfully";
                     }
                 }

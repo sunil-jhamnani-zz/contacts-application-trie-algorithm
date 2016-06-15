@@ -28,7 +28,19 @@
   <script>
     String.prototype.capitalize = function() {
       return this.charAt(0).toUpperCase() + this.slice(1);
+    };
+
+    function compare(field){
+      return function (first,second) {
+        if (first[field] < second[field])
+          return -1;
+        else if (first[field] > second[field])
+          return 1;
+        else
+          return 0;
+      }
     }
+
   </script>
 </head>
 <body ng-controller="MainController">

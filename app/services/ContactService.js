@@ -10,7 +10,7 @@
             var factory = {};
 
             factory.getContacts = function () {
-                return contactList.sort(compare);
+                return contactList.sort(compare('firstname'));
             };
 
             var contactList = [
@@ -20,19 +20,9 @@
                 {firstname: 'Kevin', lastname: 'Grant'},
                 {firstname: 'Baishampayan', lastname: 'Ghose'},
                 {firstname: 'Abinash', lastname: 'Tripathy'},
-                {firstname: 'Sunil', lastname: 'Jhamnani'},
                 {firstname: 'Sunil', lastname: ''},
-
+                {firstname: 'Sunil', lastname: 'Jhamnani'}
             ];
-
-            function compare(first,second) {
-                if (first.firstname < second. firstname)
-                    return -1;
-                else if (first.firstname > second.firstname)
-                    return 1;
-                else
-                    return 0;
-            }
 
             return factory;
         }])
