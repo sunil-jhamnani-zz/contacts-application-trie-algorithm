@@ -5,29 +5,29 @@
  * AddController works to add a new contact
  */
 
-(function(){
+(function () {
     angular.module('contactApp')
-        .controller('AddController',['$scope', '$rootScope', '$timeout', function($scope, $rootScope, $timeout) {
+        .controller('AddController', ['$scope', '$rootScope', '$timeout', function ($scope, $rootScope, $timeout) {
             $scope.addContact = function () {
                 $scope.message = '';
-                if(($scope.contact.firstname + " " + $scope.contact.lastname).length > 50) {
+                if (($scope.contact.firstname + " " + $scope.contact.lastname).length > 50) {
                     $scope.message = "Contact can only be upto 50 characters. Try again!"
                 }
                 else {
-                    $scope.contact.firstname = $scope.contact.firstname.capitalize();
-                    $scope.contact.lastname = $scope.contact.lastname ? $scope.contact.lastname.capitalize() : '';
+                    $scope.contact.lastname = $scope.contact.lastname ? $scope.contact.lastname : '';
                     if (checkAvailability()) {
-                        $rootScope.contacts.push($scope.contact);
 
-                        //Contact list is sorted after new contact is added
-                        $rootScope.contacts = $rootScope.contacts.sort(compare('firstname'));
+                        $rootScope.firstNameTrie.put($scope.contact.firstname, $scope.contact.lastname);
+                        if ($scope.contact.lastname) {
+                            $rootScope.lastNameTrie.put($scope.contact.lastname, $scope.contact.firstname);
+                        }
                         $scope.message = "Contact Added Successfully";
                     }
                 }
 
-                $timeout(function() {
+                $timeout(function () {
                     $scope.contact = null;
-                    $scope.message=null;
+                    $scope.message = null;
                 }, 1000);
 
             };
@@ -36,19 +36,15 @@
              * Function to check if the name is already added
              * @returns {boolean}
              */
-            var checkAvailability = function() {
-                for (i=0; i<$rootScope.contacts.length; i++) {
-                    if (angular.equals($rootScope.contacts[i],$scope.contact)) {
-                        $scope.message = "Contact already exists";
-                        break;
+            var checkAvailability = function () {
+                var list = $rootScope.firstNameTrie.get();
+                if (list) {
+                    if (!list.indexOf($scope.contact.firstname + " " + $scope.contact.lastname)) {
+                        return false;
                     }
                 }
-                if(i == $rootScope.contacts.length) {
-                    return true;
-                }
-                else  {
-                    return false;
-                }
+
+                return true;
             };
         }])
 }());

@@ -2,13 +2,13 @@
  * Created by sunil.jhamnani on 5/28/16.
  */
 
-(function() {
+(function () {
     'use strict';
     var app = angular.module('contactApp', ['ngRoute']);
 
-    app.config(['$routeProvider', function($routeProvider){
+    app.config(['$routeProvider', function ($routeProvider) {
 
-        $routeProvider.when('/add',{
+        $routeProvider.when('/add', {
             templateUrl: "templates/add.html",
             controller: "AddController"
         }).when('/search', {

@@ -1,70 +1,166 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html lang="en" ng-app="contactApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html lang="en" ng-app="contactApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html lang="en" ng-app="contactApp" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en" ng-app="contactApp" class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]>
+<html lang="en" ng-app="contactApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html lang="en" ng-app="contactApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html lang="en" ng-app="contactApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" ng-app="contactApp" class="no-js"> <!--<![endif]-->
 <head>
-  <meta charset="utf-8">
-  <!--<base href="/add">-->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Search through Contacts</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <style>
-    .capitalize {
-      text-transform: capitalize;
-    }
-    #message {
-      transition: opacity 2s ease-in;
-      -moz-transition:opacity 2s ease-in;
-      -o-transition: opacity 2s ease-in;
-      -webkit-transition: opacity 2s ease-in;
-    }
-    .hidden {
-      opacity: 0.0;
-    }
-  </style>
-  <script>
-    String.prototype.capitalize = function() {
-      return this.charAt(0).toUpperCase() + this.slice(1);
-    };
+    <meta charset="utf-8">
+    <!--<base href="/add">-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Search through Contacts</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+        .capitalize {
+            text-transform: capitalize;
+        }
 
-    function compare(field){
-      return function (first,second) {
-        if (first[field] < second[field])
-          return -1;
-        else if (first[field] > second[field])
-          return 1;
-        else
-          return 0;
-      }
-    }
+        #message {
+            transition: opacity 2s ease-in;
+            -moz-transition: opacity 2s ease-in;
+            -o-transition: opacity 2s ease-in;
+            -webkit-transition: opacity 2s ease-in;
+        }
 
-  </script>
+        .hidden {
+            opacity: 0.0;
+        }
+    </style>
+    <script>
+        /**
+         * Contructor function for Trie
+         * @param parent
+         * @param prev
+         * @param key
+         * @param value
+         * @param isLeaf
+         * @constructor
+         */
+        function Trie(parent, prev, key, value = Array(), isLeaf) {
+            if (key !== void 0)
+                this.key = key; // single-character key
+            if (value !== void 0)
+                this.value = value; // user-defined value
+            if (prev)
+                prev.next = this; // next sibling node
+            else if (parent)
+                parent.child = this; // first child node
+        }
+
+        /**
+         * Put a new entry in Trie
+         * @param name
+         * @param value
+         */
+        Trie.prototype.put = function (name, value) {
+            //debugger;
+            var i = 0,
+                    objTrie = this,
+                    len = name.length,
+                    prev, parent;
+            down: while (objTrie.child) {
+                parent = objTrie;
+                objTrie = objTrie.child;
+                // if first child didn't match, get next sibling
+                while (objTrie.key != name[i]) {
+                    if (!objTrie.next) {
+                        prev = objTrie;
+                        objTrie = parent;
+                        break down;
+                    }
+                    objTrie = objTrie.next;
+                }
+                // key already exists, update the value
+                if (++i > len) {
+                    objTrie.value.push(value);
+                    objTrie.isLeaf = true;
+                    return;
+                }
+            }
+            // found any existing parts of the key, add the rest
+            objTrie = new this.constructor(objTrie, prev, name[i]);
+            while (++i <= len)
+                objTrie = new this.constructor(objTrie, null, name[i]);
+            objTrie.name = name;
+            objTrie.isLeaf = true;
+            objTrie.value.push(value);
+        };
+
+        /**
+         * Get a value from the trie for a given search string
+         * @param name
+         * @param invert
+         * @returns {Array}
+         */
+        Trie.prototype.get = function (name = null, invert = false) {
+            var List = [];
+            if (!name) {
+                traverse(this, invert);
+                return List;
+            }
+            var i = 0,
+                    objTrie = this.child,
+                    len = name.length - 1;
+            while (objTrie) {
+                if (objTrie.key == name[i]) {
+                    if (i == len) {
+                        traverse(objTrie.child, invert);
+                        return List;
+                    }
+                    objTrie = objTrie.child;
+                    ++i;
+                } else {
+                    objTrie = objTrie.next;
+                }
+            }
+
+            function traverse(node, invert) {
+                if (node.child) {
+                    traverse(node.child, invert);
+                }
+
+                if (node.isLeaf) {
+                    node.value.forEach(function (element) {
+                        if (invert)
+                            List.push(element + " " + node.name)
+                        else
+                            List.push(node.name + " " + element)
+                    });
+                }
+
+                if (node.next) {
+                    traverse(node.next, invert);
+                }
+            };
+        };
+    </script>
 </head>
 <body ng-controller="MainController">
-  <nav class="navbar navbar-default">
+<nav class="navbar navbar-default">
     <div class="container-fluid">
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li><a href="#/add">Add <span class="sr-only">(current)</span></a></li>
-          <li><a href="#/search">Search</a></li>
-        </ul>
-      </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="#/add">Add <span class="sr-only">(current)</span></a></li>
+                <li><a href="#/search">Search</a></li>
+            </ul>
+        </div>
     </div>
-  </nav>
+</nav>
 
-  <div ng-view></div>
+<div ng-view></div>
 
-  <script src="lib/angular.js"></script>
-  <script src="lib/angular-route.js"></script>
-  <script src="lib/angular-mocks.js"></script>
-  <script src="app.js"></script>
-  <script src="controllers/MainController.js"></script>
-  <script src="services/ContactService.js"></script>
-  <script src="controllers/AddController.js"></script>
-  <script src="controllers/SearchController.js"></script>
-  <script src="services/filters.js"></script>
+<script src="lib/angular.js"></script>
+<script src="lib/angular-route.js"></script>
+<script src="lib/angular-mocks.js"></script>
+<script src="app.js"></script>
+<script src="controllers/MainController.js"></script>
+<script src="controllers/AddController.js"></script>
+<script src="controllers/SearchController.js"></script>
+<script src="filters/filters.js"></script>
 </body>
 </html>
